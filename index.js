@@ -30,7 +30,7 @@ export const emiylTheme = (options) => {
     ],
 
     async onPrepared(app) {
-        await app.writeTemp('adUnits.json', JSON.stringify(options.hasOwnProperty('adUnits') ? options.adUnits : []))
+        await app.writeTemp('waldoUnits.json', JSON.stringify(options.hasOwnProperty('adUnits') ? options.adUnits : []))
     },
 
     extendsMarkdown: (md) => {
