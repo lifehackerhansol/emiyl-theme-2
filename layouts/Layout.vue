@@ -20,8 +20,8 @@ const discordNoticeText = computed(() => {
   <ParentLayout>
     <template #page-content-top>
         <h1>{{ pageTitle }}</h1>
-        <div v-if="adUnits.length" :id="`waldo-tag-${adUnits[0]}`" style="margin-bottom: 1em;"></div>
         <div v-html="discordNoticeText" class="custom-container tip"/>
+        <div v-if="adUnits.length" :id="`waldo-tag-${adUnits[0]}`" style="margin-bottom: 1em;"></div>
     </template>
     <template #page-content-bottom>
         <div v-if="adUnits.length > 1" :id="`waldo-tag-${adUnits[1]}`" style="margin-bottom: 1em;"></div>
