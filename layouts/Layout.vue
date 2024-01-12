@@ -24,7 +24,7 @@ const discordNoticeText = computed(() => {
         <div v-if="waldoUnits.length" :id="`waldo-tag-${waldoUnits[0]}`" style="margin-bottom: 1em;"></div>
     </template>
     <template #page-content-bottom>
-        <div v-if="waldoUnits.length > 1" :id="`waldo-tag-${waldoUnits[1]}`" style="margin-bottom: 1em;"></div>
+        <div v-if="waldoUnits.length > 1" :id="`waldo-tag-${waldoUnits[1]}`"></div>
     </template>
   </ParentLayout>
 </template>
