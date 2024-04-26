@@ -6,7 +6,6 @@ import {
   useSiteLocaleData,
   withBase,
 } from '@vuepress/client'
-import { isArray } from '@vuepress/shared'
 import type { FunctionalComponent } from 'vue'
 import { computed, h } from 'vue'
 import type { DefaultThemeHomePageFrontmatter } from '@vuepress/theme-default/lib/shared/index'
@@ -58,7 +57,7 @@ const tagline = computed(() => {
 })
 
 const actions = computed(() => {
-  if (!isArray(frontmatter.value.actions)) {
+  if (!Array.isArray(frontmatter.value.actions)) {
     return []
   }
 
