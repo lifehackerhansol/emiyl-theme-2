@@ -1,20 +1,13 @@
-<script lang="ts">
-/* eslint-disable import/first, import/no-duplicates, import/order */
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  inheritAttrs: false,
-})
-/* eslint-enable import/order */
-</script>
-
 <script setup lang="ts">
-import { useSiteData } from '@vuepress/client'
-import { isLinkHttp, isLinkWithProtocol } from '@vuepress/shared'
 import { computed, toRefs } from 'vue'
 import type { PropType } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useSiteData } from 'vuepress/client'
+import { isLinkHttp, isLinkWithProtocol } from 'vuepress/shared'
 import type { NavLink } from '../../shared/index.js'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = defineProps({
   item: {
@@ -47,8 +40,8 @@ const linkTarget = computed(() => {
 })
 // if the `target` attr is '_blank'
 const isBlankTarget = computed(() => linkTarget.value === '_blank')
-// is `<RouterLink>` or not
-const isRouterLink = computed(
+// is `<RouteLink>` or not
+const isRouteLink = computed(
   () =>
     !hasHttpProtocol.value && !hasNonHttpProtocol.value && !isBlankTarget.value,
 )
@@ -70,38 +63,41 @@ const shouldBeActiveInSubpath = computed(() => {
   }
   return item.value.link !== '/'
 })
-// if this link is active in subpath
-const isActiveInSubpath = computed(() => {
-  if (!shouldBeActiveInSubpath.value) {
-    return false
-  }
-  return route.path.startsWith(item.value.link)
-})
 
 // if this link is active
 const isActive = computed(() => {
-  if (!isRouterLink.value) {
+  if (!isRouteLink.value) {
     return false
   }
   if (item.value.activeMatch) {
     return new RegExp(item.value.activeMatch).test(route.path)
   }
-  return isActiveInSubpath.value
+
+  if (!shouldBeActiveInSubpath.value) {
+    return false
+  }
+
+  // if this link is active in subpath
+  return route.path.startsWith(item.value.link)
 })
 </script>
 
 <template>
-  <RouterLink
-    v-if="isRouterLink"
-    :class="{ 'router-link-active': isActive }"
+  <RouteLink
+    v-if="isRouteLink"
+    :active="isActive"
     :to="item.link"
     :aria-label="linkAriaLabel"
     v-bind="$attrs"
   >
-    <slot name="before" />
-    <span v-html="item.text"/>
-    <slot name="after" />
-  </RouterLink>
+    <slot>
+      <slot name="before" />
+<!-- CHANGES START -->
+      <span v-html="item.text"/>
+<!-- CHANGES END -->
+      <slot name="after" />
+    </slot>
+  </RouteLink>
   <a
     v-else
     class="external-link"
@@ -111,9 +107,13 @@ const isActive = computed(() => {
     :aria-label="linkAriaLabel"
     v-bind="$attrs"
   >
-    <slot name="before" />
-    <span v-html="item.text"/>
-    <AutoLinkExternalIcon v-if="isBlankTarget" />
-    <slot name="after" />
+    <slot>
+      <slot name="before" />
+<!-- CHANGES START -->
+      <span v-html="item.text"/>
+<!-- CHANGES END -->
+      <AutoLinkExternalIcon v-if="isBlankTarget" />
+      <slot name="after" />
+    </slot>
   </a>
 </template>

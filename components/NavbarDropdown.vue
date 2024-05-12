@@ -3,8 +3,8 @@ import AutoLink from '@theme/AutoLink.vue'
 import DropdownTransition from '@theme/DropdownTransition.vue'
 import { computed, ref, toRefs, watch } from 'vue'
 import type { PropType } from 'vue'
-import { useRoute } from 'vue-router'
-import type { NavbarItem, ResolvedNavbarItem } from '@vuepress/theme-default/lib/shared'
+import { useRoute } from 'vuepress/client'
+import type { NavbarItem, ResolvedNavbarItem } from '../../shared/index.js'
 
 const props = defineProps({
   item: {
@@ -16,7 +16,7 @@ const props = defineProps({
 const { item } = toRefs(props)
 
 const dropdownAriaLabel = computed(
-  () => item.value.ariaLabel || item.value.text
+  () => item.value.ariaLabel || item.value.text,
 )
 
 const open = ref(false)
@@ -25,7 +25,7 @@ watch(
   () => route.path,
   () => {
     open.value = false
-  }
+  },
 )
 
 /**
@@ -57,7 +57,9 @@ const isLastItemOfArray = (item: unknown, arr: unknown[]): boolean =>
       :aria-label="dropdownAriaLabel"
       @click="handleDropdown"
     >
+<!-- CHANGES START -->
       <span class="title" v-html="item.text"/>
+<!-- CHANGES END -->
       <span class="arrow down" />
     </button>
 
@@ -67,7 +69,9 @@ const isLastItemOfArray = (item: unknown, arr: unknown[]): boolean =>
       :aria-label="dropdownAriaLabel"
       @click="open = !open"
     >
+<!-- CHANGES START -->
       <span class="title" v-html="item.text"/>
+<!-- CHANGES END -->
       <span class="arrow" :class="open ? 'down' : 'right'" />
     </button>
 
